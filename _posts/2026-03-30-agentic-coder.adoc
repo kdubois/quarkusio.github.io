@@ -1,27 +1,28 @@
 ---
 layout: post
-title: 'Vibe coding the vibe coder: using LangChain4j to build a coding agentic system'
+title: 'Vibe coding the vibe coder: using LangChain4j to build an agentic coder'
 date: 2026-03-30T00:00:00Z
 tags: ai llm agents
-synopsis: 'Vibe coding the vibe coder: using LangChain4j to build a coding agentic system'
+synopsis: 'Vibe coding the vibe coder: using LangChain4j to build an agentic coder'
 author: mariofusco
 ---
 :imagesdir: /assets/images/posts/agentic
 
-It's 2026 and handcrafting code suddenly became a thing of the past. The new trend is vibe coding, and developers are now more like conductors of orchestras of coding agents, that write code, run tests, and fix bugs on their behalf.
+It's 2026, and handcrafting code seems to suddenly have become a thing of the past. 
+Software engineering has adopted code assistants en-masse with development now being more like conducting and orchestrating coding agents that write the code, run tests, and fix bugs on their behalf.
 
-Given this premise, we thought that it could have been a good exercise to put at work the capabilities of the LangChain4j agentic framework to build a coding agentic system. Even more interestingly, we went a bit meta and decided to let a coding agentic system, Claude Opus 4.6 in this case, to design and implement the LangChain4j-based coding agentic system, following a vibe coding approach. This article discusses the outcomes of this experiment that produced, as final result, the coding agentic systems, made available in https://github.com/mariofusco/langchain4j-agentic-coder[this project].
+With this new trend in mind, we thought it would be a good exercise to put the LangChain4j agentic framework to work to build an agentic coder. Even more interesting, we went a bit meta and let a code assistant design and implement the LangChain4j-based agentic coder. This article discusses the outcomes of this experiment, which produced the agentic coder now available in https://github.com/mariofusco/langchain4j-agentic-coder[this project].
 
-== Vibe coding an agentic system
+== "Vibe coding" an agentic system
 
-To let Claude to build a first coding agentic system, we simply asked it something like the following:
+To let the code assistant build a first agentic coder of its own, we simply asked it something like this:
 
 [source]
 ----
-Study the API and capabilities of the LangChain4j agentic framework from its documentation and source code, and design a coding agentic system based on it that is a clone of yourself.
+Study the API and capabilities of the LangChain4j agentic framework from its documentation and source code, and design an agentic coder based on it that is a clone of yourself.
 ----
 
-With this prompt, after a few minutes of thinking and working, Claude decided that the https://docs.langchain4j.dev/tutorials/agents#supervisor-design-and-customization[supervisor pattern] was the best fit for the task and came up with an initial architecture for the coding agentic system, like this one:
+After a few minutes of thinking and working with this prompt, the assistant decided the https://docs.langchain4j.dev/tutorials/agents#supervisor-design-and-customization[supervisor pattern] was the best fit for the task and came up with an initial architecture like this:
 
 [source,java]
 ----
@@ -47,13 +48,13 @@ public interface SupervisorCoderSystem {
 }
 ----
 
-Claude also designed and developed, together with their relative system and user messages, the four subagents used by the supervisor, that respectively explore the existing code, create a plan for the actions to take, implement those actions following the plan, and put at work the generated code trying to compile and execute it. Moreover, it also implemented and correctly provided to those agents the necessary tools to perform their tasks, like a file system explorer for the explorer agent, a code editor for the implementer agent, and a way to run code for the executor agent.
+The code assistant also designed and developed the four subagents used by the supervisor, along with their system and user messages. These agents respectively explore the existing code, create a plan for the actions to take, implement those actions following the plan, and put the generated code to work by compiling and executing it. It also implemented and correctly provided the necessary tools for each agent: a file system explorer for the explorer agent, a code editor for the implementer agent, and a way to run code for the executor agent.
 
-This was honestly an impressive result for a first iteration. Moreover, if you have done some vibe coding with Claude before, you know that this is more or less how Claude works in the real world: it generally performs those 4 actions modeled with those 4 agents and orchestrates them in a supervisor-like way to achieve the task at hand. The fact that it was able to design and implement such a system also implies that Claude has some sort of self-awareness of its own internal workings, at least at a high level, and can translate that understanding into a concrete design for an agentic system.
+This was an impressive result for a first iteration. If you've done some vibe coding with a code assistant before, you know this is more or less how it works in the real world: it generally performs these four actions modeled by these four agents and orchestrates them in a supervisor-like way to achieve the task at hand. The fact that it could design and implement such a system suggests the code assistant has some self-awareness of its own internal workings, at least at a high level, and can translate that understanding into a concrete design for an agentic system.
 
-== Putting the agentic coder system at work
+== Putting the agentic coder at work
 
-To try the coding agentic system designed by Claude, we asked it to write some buggy code and then a test using that system to fix it. Claude generated the following `Calculator` class with 4 slightly bugged methods
+To test the agentic coder designed by the code assistant, we asked it to write some buggy code and then use that system to fix it. The code assistant generated the following `Calculator` class with four slightly bugged methods:
 
 [source,java]
 ----
@@ -117,7 +118,7 @@ public class Calculator {
 }
 ----
 
-and a test that clones the folder containing that `Calculator` class, in a temporary directory, and then executes the LangChain4j agentic system on it.
+and a test that clones the folder containing that `Calculator` class into a temporary directory, then executes the LangChain4j agentic coder on it.
 
 [source,java]
 ----
@@ -141,7 +142,7 @@ void workflow_should_fix_buggy_calculator() throws Exception {
 }
 ----
 
-Running this test, using `gpt-5-mini` as model for both the supervisor and the coding agents, after a few minutes of work, the coding agentic system printed the following output:
+Running this test using `gpt-5-mini` as the model for both the supervisor and the coding agents, the system printed the following output after a few minutes of work:
 
 [source]
 ----
@@ -161,7 +162,7 @@ Commands executed and results:
 - mvn -f /tmp/buggy-calculator test -> BUILD SUCCESS, tests run: 11, failures: 0, errors: 0, skipped: 0
 ----
 
-and was indeed able to fix all the bugs in the `Calculator` class and make all the tests pass, modifying the code, in that class in the temp folder, to the following:
+The system successfully fixed all the bugs in the `Calculator` class and made all the tests pass, modifying the code in the temp folder to the following:
 
 [source,java]
 ----
@@ -213,7 +214,7 @@ public class Calculator {
 }
 ----
 
-Starting from the version 1.12.2-beta22 of langchain4j-agentic it is possible to monitor the execution of an agentic system, simply by making the interface modeling the root agent of our system to extend the `MonitoredAgent` interface.
+Starting from version 1.12.2-beta22 of langchain4j-agentic, you can monitor the execution of an agentic coder simply by making the interface modeling the root agent extend the `MonitoredAgent` interface.
 
 [source,java]
 ----
@@ -223,15 +224,15 @@ public interface SupervisorCoderSystem extends MonitoredAgent {
 }
 ----
 
-This also allows to print the reporting of the invocations of the different agents together with the topology of the agentic system, as in the following figure, so we could have a better visual understanding of how the coding agentic system worked.
+This also lets us print a report of the agent invocations alongside the system topology, as shown in the following figure, giving us a clearer picture of how the agentic coder operates.
 
 [.text-center]
-.The topology and execution tracing of the supervisor-based coding agentic system
-image::supervisor-coder.png[width=70%, align="center", alt="The topology and execution tracing of the supervisor-based coding agentic system"]
+.The topology and execution tracing of the supervisor-based agentic coder
+image::supervisor-coder.png[width=70%, align="center", alt="The topology and execution tracing of the supervisor-based agentic coder"]
 
 == From supervisor to workflow
 
-After this first experiment, we asked Claude to redesign the coding agentic system using a workflow-based approach instead of a supervisor-based one, and it came up with the following architecture, where the workflow is a sequence made by five steps that are similar to the four former ones, plus a fifth that prints the summary of all the actions taken during the execution, something that the supervisor does autonomously without the need of a specialized agent.
+After this first experiment, we asked the code assistant to redesign the agentic coder using a workflow-based approach instead of a supervisor-based one. It came up with the following architecture: a sequence of five steps similar to the four previous ones, plus a fifth step that prints a summary of all actions taken during execution—something the supervisor handles autonomously without a dedicated agent.
 
 [source,java]
 ----
@@ -253,9 +254,9 @@ public interface WorkflowCoderSystem extends MonitoredAgent {
 }
 ----
 
-The other major difference with the supervisor-based implementation is that, this time both the planning and the execution steps are not single agents, but are implemented with a loop structure, that allows those steps to perform multiple iterations and eventually adjust and improve their work before moving forward.
+The other major difference from the supervisor-based implementation is that this time, both the planning and execution steps aren't single agents but are implemented with a loop structure that allows these steps to perform multiple iterations and adjust and improve their work before moving forward.
 
-For example the execution loop is made by three sub-agents, an executor, an evaluator, and a refactor agent, that are iteratively invoked until the evaluation score is good enough (greater than or equal to 0.8 in this case) or the maximum number of iterations is reached.
+For example, the execution loop consists of three sub-agents—an executor, an evaluator, and a refactor agent—that are iteratively invoked until the evaluation score is good enough (greater than or equal to 0.8 in this case) or the maximum number of iterations is reached.
 
 [source,java]
 ----
@@ -277,7 +278,7 @@ public interface ExecutionLoop {
 }
 ----
 
-Running the same test as before against this alternative implementation, produces a very similar result, with the following output:
+Running the same test as before against this alternative implementation produces a very similar result with the following output:
 
 [source]
 ----
@@ -323,16 +324,16 @@ To ensure continued functionality, the user should run the tests in their local 
 The overall quality of the implementation and testing process was rated at 0.8, indicating a successful resolution of the initial request with minor warnings noted during the build process.
 ----
 
-As before, the coding agentic system is able to fix all the bugs and make all the tests pass, but this time the execution tracing shows a more agentic system with a more articulated topology and consequently a more complex tracing.
+As before, the agentic coder fixes all the bugs and makes all the tests pass, but this time the execution tracing shows a more articulated topology and consequently more complex tracing.
 
 [.text-center]
-.The topology and execution tracing of the workflow-based coding agentic system
-image::workflow-coder.png[width=90%, align="center", alt="The topology and execution tracing of the workflow-based coding agentic system"]
+.The topology and execution tracing of the workflow-based agentic coder
+image::workflow-coder.png[width=90%, align="center", alt="The topology and execution tracing of the workflow-based agentic coder"]
 
-This time however, despite the higher number of agents involved, the complete debugging session is performed in only two minutes, against the more than six necessary for the supervisor-based version, because of the overhead introduced by the supervisor agent itself, that has to coordinate all the other agents, autonomously generating their invocation and the appropriate arguments to invoke them.
+This time, however, despite the higher number of agents involved, the complete debugging session takes only two minutes compared to the more than six minutes needed for the supervisor-based version. This is because of the overhead introduced by the supervisor agent itself, which has to coordinate all the other agents by autonomously generating their invocations and the appropriate arguments.
 
 == Conclusions
 
-In this article we have seen how to use the LangChain4j agentic framework to build a coding agentic system following a vibe coding approach, letting an LLM to design and implement the system itself. In this context, the API of the LangChain4j agentic framework proved to be straightforward and easy to use enough to allow the LLM to autonomously design and implement a quite complex agentic system, and at the same time powerful enough to allow Claude to clone its own internal workings in that system, creating a sort of meta-coding agentic system.
+In this article, we've seen how to use the LangChain4j agentic framework to build an agentic coder following a vibe coding approach, letting an LLM design and implement the system itself. In this context, the LangChain4j agentic framework API proved straightforward and easy enough to use that the LLM could autonomously design and implement a complex agentic coder, while being powerful enough to allow the code assistant to clone its own internal workings in that system, creating a sort of meta-agentic coder.
 
-We have also seen how to put that system at work on a real debugging session, and how to monitor its execution and visualize its topology. The results were quite impressive, with the system being able to fix all the bugs in the code and make all the tests pass, and with a quite articulated topology of agents working together to accomplish the task. Moreover, we have seen how a workflow-based approach can be more efficient than a supervisor-based one, even if it involves more agents, because of the lower overhead.
+We've also seen how to put that system to work on a real debugging session and how to monitor its execution and visualize its topology. The results were impressive—the system fixed all the bugs in the code and made all the tests pass, with an articulated topology of agents working together to accomplish the task. We've also seen how a workflow-based approach can be more efficient than a supervisor-based one, even when it involves more agents, because of the lower overhead.
