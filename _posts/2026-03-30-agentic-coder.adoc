@@ -121,7 +121,7 @@ public class Calculator {
 }
 ----
 
-and a test that clones the folder containing that `Calculator` class into a temporary directory, then executes the LangChain4j agentic coder on it.
+Next, it generated a test that clones the folder containing this `Calculator` class into a temporary directory, executing the LangChain4j agentic coder against it:
 
 [source,java]
 ----
@@ -235,7 +235,9 @@ image::supervisor-coder.png[width=70%, align="center", alt="The topology and exe
 
 == From supervisor to workflow
 
-After this first experiment, we asked the code assistant to redesign the agentic coder using a workflow-based approach instead of a supervisor-based one. It came up with the following architecture: a sequence of five steps similar to the four previous ones, plus a fifth step that prints a summary of all actions taken during execution—something the supervisor handles autonomously without a dedicated agent.
+The supervisor pattern is impressive for its autonomy, but that freedom comes with a hidden cost: overhead. To see if we could make the system more efficient and predictable, we asked the code assistant to redesign the agentic coder using a workflow-based approach.
+
+It came up with a more deterministic architecture: a strict sequence of five steps. The first four mirror the previous agents, while the fifth introduces a dedicated 'SummarizerAgent', a responsibility the supervisor previously handled implicitly on the fly. Both the planning and execution steps aren't single agents but are implemented with a loop structure that allows these steps to perform multiple iterations and adjust and improve their work before moving forward.
 
 [source,java]
 ----
@@ -256,8 +258,6 @@ public interface WorkflowCoderSystem extends MonitoredAgent {
     String code(@K(UserRequest.class) String request, @K(WorkingDirectory.class) String workingDirectory);
 }
 ----
-
-The other major difference from the supervisor-based implementation is that this time, both the planning and execution steps aren't single agents but are implemented with a loop structure that allows these steps to perform multiple iterations and adjust and improve their work before moving forward.
 
 For example, the execution loop consists of three sub-agents—an executor, an evaluator, and a refactor agent—that are iteratively invoked until the evaluation score is good enough (greater than or equal to 0.8 in this case) or the maximum number of iterations is reached.
 
@@ -339,4 +339,4 @@ This time, however, despite the higher number of agents involved, the complete d
 
 In this article, we've seen how to use the LangChain4j agentic framework to build an agentic coder following a vibe coding approach, letting an LLM design and implement the system itself. In this context, the LangChain4j agentic framework API proved straightforward and easy enough to use that the LLM could autonomously design and implement a complex agentic coder, while being powerful enough to allow the code assistant to clone its own internal workings in that system, creating a sort of meta-agentic coder.
 
-We've also seen how to put that system to work on a real debugging session and how to monitor its execution and visualize its topology. The results were impressive—the system fixed all the bugs in the code and made all the tests pass, with an articulated topology of agents working together to accomplish the task. We've also seen how a workflow-based approach can be more efficient than a supervisor-based one, even when it involves more agents, because of the lower overhead.
+We've also seen how to put that system to work on a real debugging session, monitoring its execution and visualizing its topology. The results were impressive: the system fixed all bugs and passed all tests using an articulated topology of agents. Finally, this experiment demonstrated that a workflow-based approach can be significantly more efficient than a supervisor-based one—even with more agents involved—simply by eliminating routing overhead.
