@@ -14,7 +14,7 @@ We decided to try a bit of a meta-experiment: we handed a code assistant the Lan
 
 The fact that an LLM could build this from scratch tells us two things about LangChain4j. First, the API is clean enough for an AI to pick up and use immediately. Second, the framework is robust enough to handle the heavy lifting required for actual agentic workflows.
 
-This also gave us a chance to stress-test LangChain4j's new monitoring tools. When you're letting an AI build another AI, you really need to see what's happening under the hood. Here's how the experiment went and a look at the resulting project.
+This also gave us a chance to stress-test LangChain4j's new monitoring tools. When you're letting an AI build another AI, you really need to see what's happening under the hood. Here's how the experiment went and a look at the resulting project, available in https://github.com/mariofusco/langchain4j-agentic-coder[this project].
 
 == "Vibe coding" an agentic system
 
